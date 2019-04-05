@@ -185,7 +185,7 @@ extend google.protobuf.FieldOptions {
   //   }
   //
   // Only one of {`resource`, `resource_reference`} may be set.
-  repeated ResourceReference resource_reference = 1055;
+  ResourceReference resource_reference = 1055;
 }
 
 extend google.protobuf.FileOptions {

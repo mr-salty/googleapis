@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.cloud.securitycenter.v1;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Cloud.SecurityCenter.V1";
 option go_package = "google.golang.org/genproto/googleapis/cloud/securitycenter/v1;securitycenter";
@@ -33,7 +34,9 @@ message Source {
   // https://cloud.google.com/apis/design/resource_names#relative_resource_name
   // Example:
   // "organizations/123/sources/456"
-  string name = 1;
+  string name = 1 [(google.api.resource) = {
+    pattern: "organizations/{organization}/sources/{source}"
+  }];
 
   // The source’s display name.
   // A source’s display name must be unique amongst its siblings, for example,

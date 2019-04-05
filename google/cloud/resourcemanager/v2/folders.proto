@@ -240,10 +240,7 @@ message Folder {
 
   // The Folder’s parent's resource name.
   // Updates to the folder's parent must be performed via [MoveFolders].
-  string parent = 2 [
-    (google.api.resource_reference) = {resource: "Folder"},
-    (google.api.resource_reference) = {resource: "google.api.Organization"}
-  ];
+  string parent = 2;
 
   // The folder’s display name.
   // A folder’s display name must be unique amongst its siblings, e.g.
@@ -357,10 +354,7 @@ message GetFolderRequest {
 message CreateFolderRequest {
   // The resource name of the new Folder's parent.
   // Must be of the form `folders/{folder_id}` or `organizations/{org_id}`.
-  string parent = 1 [
-    (google.api.resource_reference) = {resource: "Folder"},
-    (google.api.resource_reference) = {resource: "google.api.Organization"}
-  ];
+  string parent = 1;
 
   // The Folder being created, only the display name will be consulted.
   // All other fields will be ignored.
@@ -376,10 +370,7 @@ message MoveFolderRequest {
   // The resource name of the Folder or Organization to reparent
   // the folder under.
   // Must be of the form `folders/{folder_id}` or `organizations/{org_id}`.
-  string destination_parent = 2 [
-    (google.api.resource_reference) = {resource: "Folder"},
-    (google.api.resource_reference) = {resource: "google.api.Organization"}
-  ];
+  string destination_parent = 2;
 }
 
 // The request message for updating a folder's display name.
@@ -434,15 +425,9 @@ message FolderOperation {
 
   // The resource name of the folder's parent.
   // Only applicable when the operation_type is MOVE.
-  string source_parent = 3 [
-    (google.api.resource_reference) = {resource: "Folder"},
-    (google.api.resource_reference) = {resource: "google.api.Organization"}
-  ];
+  string source_parent = 3;
 
   // The resource name of the folder or organization we are either creating
   // the folder under or moving the folder to.
-  string destination_parent = 4 [
-    (google.api.resource_reference) = {resource: "Folder"},
-    (google.api.resource_reference) = {resource: "google.api.Organization"}
-  ];
+  string destination_parent = 4;
 }
