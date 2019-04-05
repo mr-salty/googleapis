@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.cloud.securitycenter.v1;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Cloud.SecurityCenter.V1";
 option go_package = "google.golang.org/genproto/googleapis/cloud/securitycenter/v1;securitycenter";
@@ -35,7 +36,14 @@ message SecurityMarks {
   // Examples:
   // "organizations/123/assets/456/securityMarks"
   // "organizations/123/sources/456/findings/789/securityMarks".
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "organizations/{organization}/assets/{asset}/securityMarks"
+    },
+    (google.api.resource) = {
+      pattern: "organizations/{organization}/sources/{source}/findings/{finding}/securityMarks"
+    }
+  ];
 
   // Mutable user specified security marks belonging to the parent resource.
   // Constraints are as follows:

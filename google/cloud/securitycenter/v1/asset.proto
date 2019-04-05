@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.cloud.securitycenter.v1;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 import "google/cloud/securitycenter/v1/security_marks.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
@@ -75,7 +76,9 @@ message Asset {
   // https://cloud.google.com/apis/design/resource_names#relative_resource_name
   // Example:
   // "organizations/123/assets/456".
-  string name = 1;
+  string name = 1 [(google.api.resource) = {
+    pattern: "organizations/{organization}/assets/{asset}"
+  }];
 
   // Cloud SCC managed properties. These properties are managed by
   // Cloud SCC and cannot be modified by the user.

@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.cloud.securitycenter.v1;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 import "google/cloud/securitycenter/v1/security_marks.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
@@ -52,14 +53,18 @@ message Finding {
   // https://cloud.google.com/apis/design/resource_names#relative_resource_name
   // Example:
   // "organizations/123/sources/456/findings/789"
-  string name = 1;
+  string name = 1 [(google.api.resource) = {
+    pattern: "organizations/{organization}/sources/{source}/findings/{finding}"
+  }];
 
   // The relative resource name of the source the finding belongs to. See:
   // https://cloud.google.com/apis/design/resource_names#relative_resource_name
   // This field is immutable after creation time.
   // For example:
   // "organizations/123/sources/456"
-  string parent = 2;
+  string parent = 2 [(google.api.resource_reference) = {
+    resource: "Source"
+  }];
 
   // The full resource name of the Google Cloud Platform (GCP) resource this
   // finding is for. See:
