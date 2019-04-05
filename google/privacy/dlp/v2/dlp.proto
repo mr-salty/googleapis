@@ -811,7 +811,9 @@ message RedactImageRequest {
   }
 
   // The parent resource name, for example projects/my-project-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {resource: "google.api.Project"}
+  ];
 
   // Configuration for the inspector.
   InspectConfig inspect_config = 2;
@@ -856,7 +858,9 @@ message RedactImageResponse {
 // Request to de-identify a list of items.
 message DeidentifyContentRequest {
   // The parent resource name, for example projects/my-project-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {resource: "google.api.Project"}
+  ];
 
   // Configuration for the de-identification of the content item.
   // Items specified here will override the template referenced by the
@@ -898,7 +902,9 @@ message DeidentifyContentResponse {
 // Request to re-identify an item.
 message ReidentifyContentRequest {
   // The parent resource name.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {resource: "google.api.Project"}
+  ];
 
   // Configuration for the re-identification of the content item.
   // This field shares the same proto message type that is used for
@@ -945,7 +951,9 @@ message ReidentifyContentResponse {
 // Request to search for potentially sensitive info in a ContentItem.
 message InspectContentRequest {
   // The parent resource name, for example projects/my-project-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {resource: "google.api.Project"}
+  ];
 
   // Configuration for the inspector. What specified here will override
   // the template referenced by the inspect_template_name argument.
@@ -2314,7 +2322,12 @@ message InspectTemplate {
   // The template will have one of the following formats:
   // `projects/PROJECT_ID/inspectTemplates/TEMPLATE_ID` OR
   // `organizations/ORGANIZATION_ID/inspectTemplates/TEMPLATE_ID`
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/inspectionTemplates/{inspect_template}"},
+    (google.api.resource) = {
+      pattern: "organizations/{organization}/inspectTemplates/{inspect_template}"}
+  ];
 
   // Display name (max 256 chars).
   string display_name = 2;
@@ -2340,7 +2353,12 @@ message DeidentifyTemplate {
   // The template will have one of the following formats:
   // `projects/PROJECT_ID/deidentifyTemplates/TEMPLATE_ID` OR
   // `organizations/ORGANIZATION_ID/deidentifyTemplates/TEMPLATE_ID`
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/deidentifyTemplates/{deidentify_template}"},
+    (google.api.resource) = {
+      pattern: "organizations/{organization}/deidentifyTemplates/{deidentify_template}"}
+  ];
 
   // Display name (max 256 chars).
   string display_name = 2;
@@ -2399,7 +2417,10 @@ message JobTrigger {
   // Unique resource name for the triggeredJob, assigned by the service when the
   // triggeredJob is created, for example
   // `projects/dlp-test-project/triggeredJobs/53234423`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/triggeredJobs/{triggered_job}"}
+  ];
 
   // Display name (max 100 chars)
   string display_name = 2;
@@ -2497,7 +2518,10 @@ message Action {
 message CreateInspectTemplateRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "InspectTemplate"}
+  ];
 
   // The InspectTemplate to create.
   InspectTemplate inspect_template = 2;
@@ -2514,7 +2538,10 @@ message UpdateInspectTemplateRequest {
   // Resource name of organization and inspectTemplate to be updated, for
   // example `organizations/433245324/inspectTemplates/432452342` or
   // projects/project-id/inspectTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "InspectTemplate"}
+  ];
 
   // New InspectTemplate value.
   InspectTemplate inspect_template = 2;
@@ -2528,14 +2555,20 @@ message GetInspectTemplateRequest {
   // Resource name of the organization and inspectTemplate to be read, for
   // example `organizations/433245324/inspectTemplates/432452342` or
   // projects/project-id/inspectTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "InspectTemplate"}
+  ];
 }
 
 // Request message for ListInspectTemplates.
 message ListInspectTemplatesRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "InspectTemplate"}
+  ];
 
   // Optional page token to continue retrieval. Comes from previous call
   // to `ListInspectTemplates`.
@@ -2576,13 +2609,19 @@ message DeleteInspectTemplateRequest {
   // Resource name of the organization and inspectTemplate to be deleted, for
   // example `organizations/433245324/inspectTemplates/432452342` or
   // projects/project-id/inspectTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "InspectTemplate"}
+  ];
 }
 
 // Request message for CreateJobTrigger.
 message CreateJobTriggerRequest {
   // The parent resource name, for example projects/my-project-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "JobTrigger"}
+  ];
 
   // The JobTrigger to create.
   JobTrigger job_trigger = 2;
@@ -2598,14 +2637,20 @@ message CreateJobTriggerRequest {
 message ActivateJobTriggerRequest {
   // Resource name of the trigger to activate, for example
   // `projects/dlp-test-project/jobTriggers/53234423`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "JobTrigger"}
+  ];
 }
 
 // Request message for UpdateJobTrigger.
 message UpdateJobTriggerRequest {
   // Resource name of the project and the triggeredJob, for example
   // `projects/dlp-test-project/jobTriggers/53234423`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "JobTrigger"}
+  ];
 
   // New JobTrigger value.
   JobTrigger job_trigger = 2;
@@ -2618,7 +2663,10 @@ message UpdateJobTriggerRequest {
 message GetJobTriggerRequest {
   // Resource name of the project and the triggeredJob, for example
   // `projects/dlp-test-project/jobTriggers/53234423`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "JobTrigger"}
+  ];
 }
 
 // Request message for CreateDlpJobRequest. Used to initiate long running
@@ -2626,7 +2674,10 @@ message GetJobTriggerRequest {
 // Storage.
 message CreateDlpJobRequest {
   // The parent resource name, for example projects/my-project-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "DlpJob"}
+  ];
 
   // The configuration details for the specific type of job to run.
   oneof job {
@@ -2645,7 +2696,10 @@ message CreateDlpJobRequest {
 // Request message for ListJobTriggers.
 message ListJobTriggersRequest {
   // The parent resource name, for example `projects/my-project-id`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "JobTrigger"}
+  ];
 
   // Optional page token to continue retrieval. Comes from previous call
   // to ListJobTriggers. `order_by` field must not
@@ -2713,7 +2767,10 @@ message ListJobTriggersResponse {
 message DeleteJobTriggerRequest {
   // Resource name of the project and the triggeredJob, for example
   // `projects/dlp-test-project/jobTriggers/53234423`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "JobTrigger"}
+  ];
 }
 
 message InspectJobConfig {
@@ -2755,7 +2812,10 @@ message DlpJob {
   }
 
   // The server-assigned name.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/dlpJobs/{dlp_job}"}
+  ];
 
   // The type of job.
   DlpJobType type = 2;
@@ -2791,7 +2851,10 @@ message DlpJob {
 // The request message for [DlpJobs.GetDlpJob][].
 message GetDlpJobRequest {
   // The name of the DlpJob resource.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DlpJob"}
+  ];
 }
 
 // Operators available for comparing the value of fields.
@@ -2823,7 +2886,10 @@ enum RelationalOperator {
 // The request message for listing DLP jobs.
 message ListDlpJobsRequest {
   // The parent resource name, for example projects/my-project-id.
-  string parent = 4;
+  string parent = 4 [
+    (google.api.resource_reference) = {
+      child_resource: "DlpJob"}
+  ];
 
   // Optional. Allows filtering.
   //
@@ -2887,20 +2953,29 @@ message ListDlpJobsResponse {
 // The request message for canceling a DLP job.
 message CancelDlpJobRequest {
   // The name of the DlpJob resource to be cancelled.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DlpJob"}
+  ];
 }
 
 // The request message for deleting a DLP job.
 message DeleteDlpJobRequest {
   // The name of the DlpJob resource to be deleted.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DlpJob"}
+  ];
 }
 
 // Request message for CreateDeidentifyTemplate.
 message CreateDeidentifyTemplateRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "DeidentifyTemplate"}
+  ];
 
   // The DeidentifyTemplate to create.
   DeidentifyTemplate deidentify_template = 2;
@@ -2917,7 +2992,10 @@ message UpdateDeidentifyTemplateRequest {
   // Resource name of organization and deidentify template to be updated, for
   // example `organizations/433245324/deidentifyTemplates/432452342` or
   // projects/project-id/deidentifyTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DeidentifyTemplate"}
+  ];
 
   // New DeidentifyTemplate value.
   DeidentifyTemplate deidentify_template = 2;
@@ -2931,14 +3009,20 @@ message GetDeidentifyTemplateRequest {
   // Resource name of the organization and deidentify template to be read, for
   // example `organizations/433245324/deidentifyTemplates/432452342` or
   // projects/project-id/deidentifyTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DeidentifyTemplate"}
+  ];
 }
 
 // Request message for ListDeidentifyTemplates.
 message ListDeidentifyTemplatesRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "DeidentifyTemplate"}
+  ];
 
   // Optional page token to continue retrieval. Comes from previous call
   // to `ListDeidentifyTemplates`.
@@ -2980,7 +3064,10 @@ message DeleteDeidentifyTemplateRequest {
   // Resource name of the organization and deidentify template to be deleted,
   // for example `organizations/433245324/deidentifyTemplates/432452342` or
   // projects/project-id/deidentifyTemplates/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "DeidentifyTemplate"}
+  ];
 }
 
 // Configuration for a custom dictionary created from a data source of any size
@@ -3051,7 +3138,12 @@ message StoredInfoTypeVersion {
 // version and any pending updates.
 message StoredInfoType {
   // Resource name.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/storedInfoTypes/{stored_info_types}"},
+    (google.api.resource) = {
+      pattern: "organizations/{organization}/storedInfoTypes/{stored_info_types"}
+  ];
 
   // Current version of the stored info type.
   StoredInfoTypeVersion current_version = 2;
@@ -3065,7 +3157,10 @@ message StoredInfoType {
 message CreateStoredInfoTypeRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "StoredInfoType"}
+  ];
 
   // Configuration of the storedInfoType to create.
   StoredInfoTypeConfig config = 2;
@@ -3082,7 +3177,10 @@ message UpdateStoredInfoTypeRequest {
   // Resource name of organization and storedInfoType to be updated, for
   // example `organizations/433245324/storedInfoTypes/432452342` or
   // projects/project-id/storedInfoTypes/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "StoredInfoType"}
+  ];
 
   // Updated configuration for the storedInfoType. If not provided, a new
   // version of the storedInfoType will be created with the existing
@@ -3098,14 +3196,20 @@ message GetStoredInfoTypeRequest {
   // Resource name of the organization and storedInfoType to be read, for
   // example `organizations/433245324/storedInfoTypes/432452342` or
   // projects/project-id/storedInfoTypes/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "StoredInfoType"}
+  ];
 }
 
 // Request message for ListStoredInfoTypes.
 message ListStoredInfoTypesRequest {
   // The parent resource name, for example projects/my-project-id or
   // organizations/my-org-id.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "StoredInfoType"}
+  ];
 
   // Optional page token to continue retrieval. Comes from previous call
   // to `ListStoredInfoTypes`.
@@ -3147,7 +3251,10 @@ message DeleteStoredInfoTypeRequest {
   // Resource name of the organization and storedInfoType to be deleted, for
   // example `organizations/433245324/storedInfoTypes/432452342` or
   // projects/project-id/storedInfoTypes/432452342.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "StoredInfoType"}
+  ];
 }
 
 // An enum to represent the various type of DLP jobs.
