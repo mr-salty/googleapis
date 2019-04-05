@@ -17,6 +17,9 @@ syntax = "proto3";
 
 package google.cloud.iot.v1;
 
+import "google/api/client.proto";
+import "google/api/resource.proto";
+
 import "google/api/annotations.proto";
 import "google/cloud/iot/v1/resources.proto";
 import "google/iam/v1/iam_policy.proto";
@@ -42,6 +45,7 @@ service DeviceManager {
       post: "/v1/{parent=projects/*/locations/*}/registries"
       body: "device_registry"
     };
+    option (google.api.method_signature) = "parent,device_registry";
   }
 
   // Gets a device registry configuration.
@@ -49,6 +53,7 @@ service DeviceManager {
     option (google.api.http) = {
       get: "/v1/{name=projects/*/locations/*/registries/*}"
     };
+    option (google.api.method_signature) = "name";
   }
 
   // Updates a device registry configuration.
@@ -58,6 +63,7 @@ service DeviceManager {
       patch: "/v1/{device_registry.name=projects/*/locations/*/registries/*}"
       body: "device_registry"
     };
+    option (google.api.method_signature) = "device_registry,update_mask";
   }
 
   // Deletes a device registry configuration.
@@ -66,6 +72,7 @@ service DeviceManager {
     option (google.api.http) = {
       delete: "/v1/{name=projects/*/locations/*/registries/*}"
     };
+    option (google.api.method_signature) = "name";
   }
 
   // Lists device registries.
@@ -74,6 +81,8 @@ service DeviceManager {
     option (google.api.http) = {
       get: "/v1/{parent=projects/*/locations/*}/registries"
     };
+
+    option (google.api.method_signature) = "parent";
   }
 
   // Creates a device in a device registry.
@@ -82,6 +91,7 @@ service DeviceManager {
       post: "/v1/{parent=projects/*/locations/*/registries/*}/devices"
       body: "device"
     };
+    option (google.api.method_signature) = "parent,device";
   }
 
   // Gets details about a device.
@@ -92,6 +102,7 @@ service DeviceManager {
         get: "/v1/{name=projects/*/locations/*/registries/*/groups/*/devices/*}"
       }
     };
+    option (google.api.method_signature) = "name";
   }
 
   // Updates a device.
@@ -104,6 +115,7 @@ service DeviceManager {
         body: "device"
       }
     };
+    option (google.api.method_signature) = "device,update_mask";
   }
 
   // Deletes a device.
@@ -111,6 +123,7 @@ service DeviceManager {
     option (google.api.http) = {
       delete: "/v1/{name=projects/*/locations/*/registries/*/devices/*}"
     };
+    option (google.api.method_signature) = "name";
   }
 
   // List devices in a device registry.
@@ -121,6 +134,7 @@ service DeviceManager {
         get: "/v1/{parent=projects/*/locations/*/registries/*/groups/*}/devices"
       }
     };
+    option (google.api.method_signature) = "parent";
   }
 
   // Modifies the configuration for the device, which is eventually sent from
@@ -136,6 +150,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "name,binary_data";
   }
 
   // Lists the last few versions of the device configuration in descending
@@ -148,6 +163,7 @@ service DeviceManager {
         get: "/v1/{name=projects/*/locations/*/registries/*/groups/*/devices/*}/configVersions"
       }
     };
+    option (google.api.method_signature) = "name";
   }
 
   // Lists the last few versions of the device state in descending order (i.e.:
@@ -160,6 +176,7 @@ service DeviceManager {
         get: "/v1/{name=projects/*/locations/*/registries/*/groups/*/devices/*}/states"
       }
     };
+    option (google.api.method_signature) = "name";
   }
 
   // Sets the access control policy on the specified resource. Replaces any
@@ -174,6 +191,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "resource,policy";
   }
 
   // Gets the access control policy for a resource.
@@ -189,6 +207,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "resource";
   }
 
   // Returns permissions that a caller has on the specified resource.
@@ -204,6 +223,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "resource,permissions";
   }
 
   // Sends a command to the specified device. In order for a device to be able
@@ -229,6 +249,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "name,binary_data,subfolder";
   }
 
   // Associates the device with the gateway.
@@ -242,6 +263,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "parent,gateway_id,device_id";
   }
 
   // Deletes the association between the device and the gateway.
@@ -255,6 +277,7 @@ service DeviceManager {
         body: "*"
       }
     };
+    option (google.api.method_signature) = "parent,gateway_id,device_id";
   }
 }
 
@@ -262,7 +285,9 @@ service DeviceManager {
 message CreateDeviceRegistryRequest {
   // The project and cloud region where this device registry must be created.
   // For example, `projects/example-project/locations/us-central1`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {child_resource: "DeviceRegistry"}
+  ];
 
   // The device registry. The field `name` must be empty. The server will
   // generate that field from the device registry `id` provided and the
@@ -274,14 +299,18 @@ message CreateDeviceRegistryRequest {
 message GetDeviceRegistryRequest {
   // The name of the device registry. For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "DeviceRegistry"}
+  ];
 }
 
 // Request for `DeleteDeviceRegistry`.
 message DeleteDeviceRegistryRequest {
   // The name of the device registry. For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "DeviceRegistry"}
+  ];
 }
 
 // Request for `UpdateDeviceRegistry`.
@@ -289,7 +318,9 @@ message UpdateDeviceRegistryRequest {
   // The new values for the device registry. The `id` field must be empty, and
   // the `name` field must indicate the path of the resource. For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  DeviceRegistry device_registry = 1;
+  DeviceRegistry device_registry = 1 [
+    (google.api.resource_reference) = {resource: "DeviceRegistry"}
+  ];
 
   // Only updates the `device_registry` fields indicated by this mask.
   // The field mask must not be empty, and it must not contain fields that
@@ -303,7 +334,9 @@ message UpdateDeviceRegistryRequest {
 message ListDeviceRegistriesRequest {
   // The project and cloud region path. For example,
   // `projects/example-project/locations/us-central1`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {child_resource: "DeviceRegistry"}
+  ];
 
   // The maximum number of registries to return in the response. If this value
   // is zero, the service will select a default size. A call may return fewer
@@ -333,7 +366,10 @@ message CreateDeviceRequest {
   // The name of the device registry where this device should be created.
   // For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  string parent = 1;
+  string parent = 1 [
+    // TODO: unlike other device-relevant names, this one cannot be in a group
+    (google.api.resource_reference) = {resource: "RegistryDevice"}
+  ];
 
   // The device registration details. The field `name` must be empty. The server
   // generates `name` from the device registry `id` and the
@@ -346,7 +382,9 @@ message GetDeviceRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "Device"}
+  ];
 
   // The fields of the `Device` resource to be returned in the response. If the
   // field mask is unset or empty, all fields are returned.
@@ -373,14 +411,19 @@ message DeleteDeviceRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    // TODO: confirm that this is what we want
+    (google.api.resource_reference) = {resource: "RegistryDevice"}
+  ];
 }
 
 // Request for `ListDevices`.
 message ListDevicesRequest {
   // The device registry path. Required. For example,
   // `projects/my-project/locations/us-central1/registries/my-registry`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {child_resource: "Device"}
+  ];
 
   // A list of device numeric IDs. If empty, this field is ignored. Maximum
   // IDs: 10,000.
@@ -449,7 +492,9 @@ message ModifyCloudToDeviceConfigRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "Device"}
+  ];
 
   // The version number to update. If this value is zero, it will not check the
   // version number of the server and will always update the current version;
@@ -467,7 +512,9 @@ message ListDeviceConfigVersionsRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "Device"}
+  ];
 
   // The number of versions to list. Versions are listed in decreasing order of
   // the version number. The maximum number of versions retained is 10. If this
@@ -487,7 +534,9 @@ message ListDeviceStatesRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "Device"}
+  ];
 
   // The number of states to list. States are listed in descending order of
   // update time. The maximum number of states retained is 10. If this
@@ -507,7 +556,9 @@ message SendCommandToDeviceRequest {
   // The name of the device. For example,
   // `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
   // `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {resource: "Device"}
+  ];
 
   // The command data to send to the device.
   bytes binary_data = 2;
@@ -527,7 +578,9 @@ message SendCommandToDeviceResponse {}
 message BindDeviceToGatewayRequest {
   // The name of the registry. For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {child_resource: "Device"}
+  ];
 
   // The value of `gateway_id` can be either the device numeric ID or the
   // user-defined device identifier.
@@ -546,7 +599,9 @@ message BindDeviceToGatewayResponse {}
 message UnbindDeviceFromGatewayRequest {
   // The name of the registry. For example,
   // `projects/example-project/locations/us-central1/registries/my-registry`.
-  string parent = 1;
+  string parent = 1 [
+    (google.api.resource_reference) = {child_resource: "Device"}
+  ];
 
   // The value of `gateway_id` can be either the device numeric ID or the
   // user-defined device identifier.
