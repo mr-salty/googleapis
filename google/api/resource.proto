@@ -24,16 +24,131 @@ option java_multiple_files = true;
 option java_outer_classname = "ResourceProto";
 option java_package = "com.google.api";
 option objc_class_prefix = "GAPI";
+option cc_enable_arenas = true;
 
-option (google.api.resource_definition) = {
-  pattern: "projects/{project}"
-  symbol: "Project"
-};
+// An annotation designating that this field designates a resource.
+//
+// Example:
+//
+//   message Topic {
+//     string name = 1 [(google.api.resource) = {
+//       pattern: "projects/{project}/topics/{topic}"
+//     }];
+//   }
+//
+// Occasionally, resources have multiple patterns (usually because they can
+// live under multiple parents). In this situation, the annotation may be
+// provided multiple times.
+//
+// Example:
+//
+//   message LogEntry {
+//     string name = 1 [
+//       (google.api.resource) = {
+//         pattern: "projects/{project}/logs/{log}"
+//       },
+//       (google.api.resource) = {
+//         pattern: "organizations/{organization}/logs/{log}"
+//       },
+//       (google.api.resource) = {
+//         pattern: "folders/{folder}/logs/{log}"
+//       },
+//       (google.api.resource) = {
+//         pattern: "billingAccounts/{billing_account}/logs/{log}"
+//       }
+//     ];
+//
+// (-- go/not-api-precedent: In general, resources should not have multiple
+//     patterns, especially in a world with flex resources. This exists
+//     primarily to support already-existing APIs which required the pattern.
+//  --)
+message Resource {
+  // Required. The resource's name template.
+  //
+  // Examples:
+  //   - "projects/{project}/topics/{topic}"
+  //   - "projects/{project}/knowledgeBases/{knowledge_base}"
+  string pattern = 1;
 
-option (google.api.resource_definition) = {
-  pattern: "organizations/{organization}"
-  symbol: "Organization"
-};
+  // Set this to true if the resource originally had one pattern and launched
+  // as such, and multiple patterns were added later. This should only be set
+  // on the original pattern.
+  bool historical_singleton_pattern = 2;
+}
+
+
+// An annotation designating a resource with no corresponding message.
+// This can be used to refer to common resources (e.g. Project) or resources
+// in other APIs.
+//
+// Example:
+//   option (google.api.resource_definition) = {
+//     pattern: "projects/{project}"
+//     symbol: "Project"
+//   };
+//
+// Note: "Project" and "Organization" are defined in this file, and do not
+// need to be redefined in individual APIs.
+message ResourceDefinition {
+  // The resource, as it would be defined on a field in a message.
+  //
+  // Example: {pattern: "projects/{project}"}
+  Resource resource = 1;
+
+  // The name that should be used in code to describe the resource,
+  // in PascalCase.
+  //
+  // Examples: "Project", "BillingAccount"
+  string symbol = 2;
+}
+
+
+// An annotation designating that this field is a reference to a resource
+// defined by another message.
+message ResourceReference {
+  // The fully qualified message name of the type that this field references.
+  // Marks this as a field referring to a resource in another message.
+  //
+  // Example:
+  //
+  //   message Subscription {
+  //     string topic = 2
+  //       [(google.api.resource_reference).message = "google.pubsub.v1.Topic"];
+  //   }
+  //
+  // If the referenced message is in the same proto package, the package
+  // may be omitted:
+  //
+  //   message Subscription {
+  //     string topic = 2
+  //       [(google.api.resource_reference).message = "Topic"];
+  //   }
+  string resource = 1;
+
+  // The fully-qualified message name of a child of the type that this field
+  // references.
+  //
+  // This is useful for `parent` fields where a resource has more than one
+  // possible type of parent.
+  //
+  // Example:
+  //
+  //   message ListLogEntriesRequest {
+  //     string parent = 1 [(google.api.resource_reference) = {
+  //       child_message: "google.logging.v2.LogEntry"
+  //     };
+  //   }
+  //
+  // If the referenced message is in the same proto package, the package
+  // may be omitted:
+  //
+  //   message ListLogEntriesRequest {
+  //     string parent = 1
+  //       [(google.api.resource_reference).child_message = "LogEntry"];
+  //   }
+  string child_resource = 2;
+}
+
 
 extend google.protobuf.FieldOptions {
   // A representation of the resource.
@@ -49,7 +164,7 @@ extend google.protobuf.FieldOptions {
   //     }
   //
   // Only one of {`resource`, `resource_reference`} may be set.
-  google.api.Resource resource = 1053;
+  repeated Resource resource = 1053;
 
   // The fully qualified message name of the type that this field references.
   // Marks this as a field referring to a resource in another message.
@@ -58,7 +173,7 @@ extend google.protobuf.FieldOptions {
   //
   //   message Subscription {
   //     string topic = 2
-  //       [(google.api.resource_reference) = "google.pubsub.v1.Topic"];
+  //       [(google.api.resource_reference).resource = "google.pubsub.v1.Topic"];
   //   }
   //
   // If the referenced message is in the same proto package, the package
@@ -66,11 +181,11 @@ extend google.protobuf.FieldOptions {
   //
   //   message Subscription {
   //     string topic = 2
-  //       [(google.api.resource_reference) = "Topic"];
+  //       [(google.api.resource_reference).resource = "Topic"];
   //   }
   //
   // Only one of {`resource`, `resource_reference`} may be set.
-  string resource_reference = 1055;
+  repeated ResourceReference resource_reference = 1055;
 }
 
 extend google.protobuf.FileOptions {
@@ -81,37 +196,27 @@ extend google.protobuf.FileOptions {
   //
   // See the example of `google.api.Project` and `google.api.Organization`
   // at the bottom of this file.
-  repeated google.api.Resource resource_definition = 1053;
+  repeated ResourceDefinition resource_definition = 1053;
 }
 
-// An annotation designating that this field designates a resource.
+// The "Project" and "Organization" resources are commonly used, and may
+// all rely on the common definition here.
 //
 // Example:
 //
-//     message Topic {
-//       string name = 1 [(google.api.resource) = {
-//         name: "projects/{project}/topics/{topic}"
-//       }];
+//     message ListTopicsRequest {
+//       string parent = 1
+//         [(google.api.resource_reference) = "google.api.Project"];
 //     }
-message Resource {
-  // Required. The resource's name template.
-  //
-  // Examples:
-  //   - "projects/{project}/topics/{topic}"
-  //   - "projects/{project}/knowledgeBases/{knowledge_base}"
-  string pattern = 1;
-
-  // The name that should be used in code to describe the resource,
-  // in PascalCase.
-  //
-  // If omitted, this is inferred from the name of the message.
-  // This is required if the resource is being defined without the context
-  // of a message (see `resource_definition`, below).
-  //
-  // Example:
-  //   option (google.api.resource_definition) = {
-  //     pattern: "projects/{project}"
-  //     symbol: "Project"
-  //   };
-  string symbol = 2;
-}
+option (google.api.resource_definition) = {
+  symbol: "Project"
+  resource: {
+    pattern: "projects/{project}"
+  }
+};
+option (google.api.resource_definition) = {
+  symbol: "Organization"
+  resource: {
+    pattern: "organizations/{organization}"
+  }
+};
