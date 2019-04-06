@@ -40,9 +40,6 @@ option objc_class_prefix = "GCA";
 // there would be one note for the vulnerability and an occurrence for each
 // image with the vulnerability referring to that note.
 service ContainerAnalysisV1Beta1 {
-  option (google.iam.v1.parent_resource) = {resource: "Note"};
-  option (google.iam.v1.parent_resource) = {resource: "Occurrence"};
-
   // Sets the access control policy on the specified note or occurrence.
   // Requires `containeranalysis.notes.setIamPolicy` or
   // `containeranalysis.occurrences.setIamPolicy` permission if the resource is
