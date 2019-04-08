@@ -23,6 +23,7 @@ import "google/ads/googleads/v1/enums/spending_limit_type.proto";
 import "google/ads/googleads/v1/enums/time_type.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -50,17 +51,21 @@ message AccountBudgetProposal {
   //
   //
   // `customers/{customer_id}/accountBudgetProposals/{account_budget_proposal_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/accountBudgetProposals/{account_budget_proposal}"
+  }];
 
   // The ID of the proposal.
   google.protobuf.Int64Value id = 14;
 
   // The resource name of the billing setup associated with this proposal.
-  google.protobuf.StringValue billing_setup = 2;
+  google.protobuf.StringValue billing_setup = 2
+    [(google.api.resource_reference).resource = "BillingSetup"];
 
   // The resource name of the account-level budget associated with this
   // proposal.
-  google.protobuf.StringValue account_budget = 3;
+  google.protobuf.StringValue account_budget = 3
+    [(google.api.resource_reference).resource = "AccountBudget"];
 
   // The type of this proposal, e.g. END to end the budget associated with this
   // proposal.

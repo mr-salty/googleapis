@@ -27,6 +27,7 @@ import "google/ads/googleads/v1/enums/criterion_type.proto";
 import "google/ads/googleads/v1/enums/quality_score_bucket.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -86,7 +87,9 @@ message AdGroupCriterion {
   // Ad group criterion resource names have the form:
   //
   // `customers/{customer_id}/adGroupCriteria/{ad_group_id}~{criterion_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupCriteria/{ad_group}~{criterion}"
+  }];
 
   // The ID of the criterion.
   //
@@ -100,7 +103,8 @@ message AdGroupCriterion {
   QualityInfo quality_info = 4;
 
   // The ad group to which the criterion belongs.
-  google.protobuf.StringValue ad_group = 5;
+  google.protobuf.StringValue ad_group = 5
+    [(google.api.resource_reference).resource = "AdGroup"];
 
   // The type of the criterion.
   google.ads.googleads.v1.enums.CriterionTypeEnum.CriterionType type = 25;

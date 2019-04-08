@@ -21,6 +21,7 @@ import "google/ads/googleads/v1/enums/extension_setting_device.proto";
 import "google/ads/googleads/v1/enums/extension_type.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -40,7 +41,9 @@ message AdGroupExtensionSetting {
   //
   //
   // `customers/{customer_id}/adGroupExtensionSettings/{ad_group_id}~{extension_type}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupExtensionSettings/{ad_group}~{extension_type}"
+  }];
 
   // The extension type of the ad group extension setting.
   google.ads.googleads.v1.enums.ExtensionTypeEnum.ExtensionType extension_type = 2;
@@ -50,13 +53,15 @@ message AdGroupExtensionSetting {
   // AdGroup resource names have the form:
   //
   // `customers/{customer_id}/adGroups/{ad_group_id}`
-  google.protobuf.StringValue ad_group = 3;
+  google.protobuf.StringValue ad_group = 3
+    [(google.api.resource_reference).resource = "AdGroup"];
 
   // The resource names of the extension feed items to serve under the ad group.
   // ExtensionFeedItem resource names have the form:
   //
   // `customers/{customer_id}/extensionFeedItems/{feed_item_id}`
-  repeated google.protobuf.StringValue extension_feed_items = 4;
+  repeated google.protobuf.StringValue extension_feed_items = 4
+    [(google.api.resource_reference).resource = "ExtensionFeedItem"];
 
   // The device for which the extensions will serve. Optional.
   google.ads.googleads.v1.enums.ExtensionSettingDeviceEnum.ExtensionSettingDevice device = 5;

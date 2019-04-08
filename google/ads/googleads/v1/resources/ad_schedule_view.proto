@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.ads.googleads.v1.resources;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -37,5 +38,7 @@ message AdScheduleView {
   // AdSchedule view resource names have the form:
   //
   // `customers/{customer_id}/adScheduleViews/{campaign_id}~{criterion_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adScheduleViews/{campaign}~{criterion}"
+  }];
 }

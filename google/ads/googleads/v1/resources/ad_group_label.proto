@@ -19,6 +19,7 @@ package google.ads.googleads.v1.resources;
 
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -36,11 +37,15 @@ message AdGroupLabel {
   // The resource name of the ad group label.
   // Ad group label resource names have the form:
   // `customers/{customer_id}/adGroupLabels/{ad_group_id}~{label_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupLabels/{ad_group}~{label}"
+  }];
 
   // The ad group to which the label is attached.
-  google.protobuf.StringValue ad_group = 2;
+  google.protobuf.StringValue ad_group = 2
+    [(google.api.resource_reference).resource = "AdGroup"];
 
   // The label assigned to the ad group.
-  google.protobuf.StringValue label = 3;
+  google.protobuf.StringValue label = 3
+    [(google.api.resource_reference).resource = "Label"];
 }

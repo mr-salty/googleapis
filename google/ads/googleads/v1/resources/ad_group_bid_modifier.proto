@@ -21,6 +21,7 @@ import "google/ads/googleads/v1/common/criteria.proto";
 import "google/ads/googleads/v1/enums/bid_modifier_source.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -39,7 +40,9 @@ message AdGroupBidModifier {
   // Ad group bid modifier resource names have the form:
   //
   // `customers/{customer_id}/adGroupBidModifiers/{ad_group_id}~{criterion_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupBidModifiers/{ad_group}~{criterion}"
+  }];
 
   // The ad group to which this criterion belongs.
   google.protobuf.StringValue ad_group = 2;

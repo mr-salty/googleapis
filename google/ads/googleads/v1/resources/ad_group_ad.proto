@@ -25,6 +25,7 @@ import "google/ads/googleads/v1/enums/policy_review_status.proto";
 import "google/ads/googleads/v1/resources/ad.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -43,13 +44,16 @@ message AdGroupAd {
   // Ad group ad resource names have the form:
   //
   // `customers/{customer_id}/adGroupAds/{ad_group_id}~{ad_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupAds/{ad_group}~{ad}"
+  }];
 
   // The status of the ad.
   google.ads.googleads.v1.enums.AdGroupAdStatusEnum.AdGroupAdStatus status = 3;
 
   // The ad group to which the ad belongs.
-  google.protobuf.StringValue ad_group = 4;
+  google.protobuf.StringValue ad_group = 4
+    [(google.api.resource_reference).resource = "AdGroup"];
 
   // The ad.
   Ad ad = 5;

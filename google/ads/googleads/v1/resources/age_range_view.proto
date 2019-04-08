@@ -18,6 +18,7 @@ syntax = "proto3";
 package google.ads.googleads.v1.resources;
 
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -36,5 +37,7 @@ message AgeRangeView {
   // Age range view resource names have the form:
   //
   // `customers/{customer_id}/ageRangeViews/{ad_group_id}~{criterion_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/ageRangeViews/{ad_group}~{criterion}"
+  }];
 }

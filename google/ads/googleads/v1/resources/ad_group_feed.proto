@@ -22,6 +22,7 @@ import "google/ads/googleads/v1/enums/feed_link_status.proto";
 import "google/ads/googleads/v1/enums/placeholder_type.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -40,13 +41,17 @@ message AdGroupFeed {
   // Ad group feed resource names have the form:
   //
   // `customers/{customer_id}/adGroupFeeds/{ad_group_id}~{feed_id}
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/adGroupFeeds/{ad_group}~{feed}"
+  }];
 
   // The feed being linked to the ad group.
-  google.protobuf.StringValue feed = 2;
+  google.protobuf.StringValue feed = 2
+    [(google.api.resource_reference).resource = "Feed"];
 
   // The ad group being linked to the feed.
-  google.protobuf.StringValue ad_group = 3;
+  google.protobuf.StringValue ad_group = 3
+    [(google.api.resource_reference).resource = "AdGroup"];
 
   // Indicates which placeholder types the feed may populate under the connected
   // ad group. Required.

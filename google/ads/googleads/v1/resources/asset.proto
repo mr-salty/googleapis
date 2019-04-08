@@ -21,6 +21,7 @@ import "google/ads/googleads/v1/common/asset_types.proto";
 import "google/ads/googleads/v1/enums/asset_type.proto";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
+import "google/api/resource.proto";
 
 option csharp_namespace = "Google.Ads.GoogleAds.V1.Resources";
 option go_package = "google.golang.org/genproto/googleapis/ads/googleads/v1/resources;resources";
@@ -40,7 +41,9 @@ message Asset {
   // Asset resource names have the form:
   //
   // `customers/{customer_id}/assets/{asset_id}`
-  string resource_name = 1;
+  string resource_name = 1 [(google.api.resource) = {
+    pattern: "customers/{customer}/assets/{asset}"
+  }];
 
   // The ID of the asset.
   google.protobuf.Int64Value id = 2;
