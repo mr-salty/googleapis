@@ -17,6 +17,7 @@ syntax = "proto3";
 
 package google.pubsub.v1;
 
+import "google/api/resource.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
@@ -365,7 +366,10 @@ message Topic {
   // underscores (`_`), periods (`.`), tildes (`~`), plus (`+`) or percent
   // signs (`%`). It must be between 3 and 255 characters in length, and it
   // must not start with `"goog"`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/topics/{topics}"}
+  ];
 
   // See <a href="https://cloud.google.com/pubsub/docs/labels"> Creating and
   // managing labels</a>.
@@ -421,13 +425,19 @@ message PubsubMessage {
 message GetTopicRequest {
   // The name of the topic to get.
   // Format is `projects/{project}/topics/{topic}`.
-  string topic = 1;
+  string topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 }
 
 // Request for the UpdateTopic method.
 message UpdateTopicRequest {
   // The updated topic object.
-  Topic topic = 1;
+  Topic topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 
   // Indicates which fields in the provided topic to update. Must be specified
   // and non-empty. Note that if `update_mask` contains
@@ -441,7 +451,10 @@ message UpdateTopicRequest {
 message PublishRequest {
   // The messages in the request will be published on this topic.
   // Format is `projects/{project}/topics/{topic}`.
-  string topic = 1;
+  string topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 
   // The messages to publish.
   repeated PubsubMessage messages = 2;
@@ -459,7 +472,10 @@ message PublishResponse {
 message ListTopicsRequest {
   // The name of the project in which to list topics.
   // Format is `projects/{project-id}`.
-  string project = 1;
+  string project = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "Topic"}
+  ];
 
   // Maximum number of topics to return.
   int32 page_size = 2;
@@ -484,7 +500,10 @@ message ListTopicsResponse {
 message ListTopicSubscriptionsRequest {
   // The name of the topic that subscriptions are attached to.
   // Format is `projects/{project}/topics/{topic}`.
-  string topic = 1;
+  string topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 
   // Maximum number of subscription names to return.
   int32 page_size = 2;
@@ -513,7 +532,10 @@ message ListTopicSubscriptionsResponse {
 message ListTopicSnapshotsRequest {
   // The name of the topic that snapshots are attached to.
   // Format is `projects/{project}/topics/{topic}`.
-  string topic = 1;
+  string topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 
   // Maximum number of snapshot names to return.
   int32 page_size = 2;
@@ -542,7 +564,10 @@ message ListTopicSnapshotsResponse {
 message DeleteTopicRequest {
   // Name of the topic to delete.
   // Format is `projects/{project}/topics/{topic}`.
-  string topic = 1;
+  string topic = 1 [
+    (google.api.resource_reference) = {
+      resource: "Topic"}
+  ];
 }
 
 // A subscription resource.
@@ -553,7 +578,10 @@ message Subscription {
   // (`[0-9]`), dashes (`-`), underscores (`_`), periods (`.`), tildes (`~`),
   // plus (`+`) or percent signs (`%`). It must be between 3 and 255 characters
   // in length, and it must not start with `"goog"`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/subscriptions/{subscription}"}
+  ];
 
   // The name of the topic from which this subscription is receiving messages.
   // Format is `projects/{project}/topics/{topic}`.
@@ -728,13 +756,19 @@ message ReceivedMessage {
 message GetSubscriptionRequest {
   // The name of the subscription to get.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 }
 
 // Request for the UpdateSubscription method.
 message UpdateSubscriptionRequest {
   // The updated subscription object.
-  Subscription subscription = 1;
+  Subscription subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // Indicates which fields in the provided subscription to update.
   // Must be specified and non-empty.
@@ -745,7 +779,10 @@ message UpdateSubscriptionRequest {
 message ListSubscriptionsRequest {
   // The name of the project in which to list subscriptions.
   // Format is `projects/{project-id}`.
-  string project = 1;
+  string project = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "Subscription"}
+  ]; 
 
   // Maximum number of subscriptions to return.
   int32 page_size = 2;
@@ -771,14 +808,20 @@ message ListSubscriptionsResponse {
 message DeleteSubscriptionRequest {
   // The subscription to delete.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 }
 
 // Request for the ModifyPushConfig method.
 message ModifyPushConfigRequest {
   // The name of the subscription.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // The push configuration for future deliveries.
   //
@@ -793,7 +836,10 @@ message ModifyPushConfigRequest {
 message PullRequest {
   // The subscription from which messages should be pulled.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // If this field set to true, the system will respond immediately even if
   // it there are no messages available to return in the `Pull` response.
@@ -819,7 +865,10 @@ message PullResponse {
 message ModifyAckDeadlineRequest {
   // The name of the subscription.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // List of acknowledgment IDs.
   repeated string ack_ids = 4;
@@ -839,7 +888,10 @@ message ModifyAckDeadlineRequest {
 message AcknowledgeRequest {
   // The subscription whose message is being acknowledged.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // The acknowledgment ID for the messages being acknowledged that was returned
   // by the Pub/Sub system in the `Pull` response. Must not be empty.
@@ -854,7 +906,10 @@ message StreamingPullRequest {
   // provided in the first request on the stream, and must not be set in
   // subsequent requests from client to server.
   // Format is `projects/{project}/subscriptions/{sub}`.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   // List of acknowledgement IDs for acknowledging previously received messages
   // (received on this stream or a different stream). If an ack ID has expired,
@@ -909,7 +964,10 @@ message CreateSnapshotRequest {
   // <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
   // resource name rules</a>.
   // Format is `projects/{project}/snapshots/{snap}`.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource_reference) = {
+      resource: "Snapshot"}
+  ]; 
 
   // The subscription whose backlog the snapshot retains.
   // Specifically, the created snapshot is guaranteed to retain:
@@ -933,7 +991,10 @@ message CreateSnapshotRequest {
 // use. It is not subject to any SLA or deprecation policy.
 message UpdateSnapshotRequest {
   // The updated snapshot object.
-  Snapshot snapshot = 1;
+  Snapshot snapshot = 1 [
+    (google.api.resource_reference) = {
+      resource: "Snapshot"}
+  ]; 
 
   // Indicates which fields in the provided snapshot to update.
   // Must be specified and non-empty.
@@ -951,7 +1012,10 @@ message UpdateSnapshotRequest {
 // use. It is not subject to any SLA or deprecation policy.
 message Snapshot {
   // The name of the snapshot.
-  string name = 1;
+  string name = 1 [
+    (google.api.resource) = {
+      pattern: "projects/{project}/snapshots/{snapshot}"}
+  ]; 
 
   // The name of the topic from which this snapshot is retaining messages.
   string topic = 2;
@@ -980,7 +1044,10 @@ message Snapshot {
 message GetSnapshotRequest {
   // The name of the snapshot to get.
   // Format is `projects/{project}/snapshots/{snap}`.
-  string snapshot = 1;
+  string snapshot = 1 [
+    (google.api.resource_reference) = {
+      resource: "Snapshot"}
+  ]; 
 }
 
 // Request for the `ListSnapshots` method.<br><br>
@@ -990,7 +1057,10 @@ message GetSnapshotRequest {
 message ListSnapshotsRequest {
   // The name of the project in which to list snapshots.
   // Format is `projects/{project-id}`.
-  string project = 1;
+  string project = 1 [
+    (google.api.resource_reference) = {
+      child_resource: "Snapshot"}
+  ]; 
 
   // Maximum number of snapshots to return.
   int32 page_size = 2;
@@ -1021,7 +1091,10 @@ message ListSnapshotsResponse {
 message DeleteSnapshotRequest {
   // The name of the snapshot to delete.
   // Format is `projects/{project}/snapshots/{snap}`.
-  string snapshot = 1;
+  string snapshot = 1 [
+    (google.api.resource_reference) = {
+      resource: "Snapshot"}
+  ]; 
 }
 
 // Request for the `Seek` method. <br><br>
@@ -1030,7 +1103,10 @@ message DeleteSnapshotRequest {
 // use. It is not subject to any SLA or deprecation policy.
 message SeekRequest {
   // The subscription to affect.
-  string subscription = 1;
+  string subscription = 1 [
+    (google.api.resource_reference) = {
+      resource: "Subscription"}
+  ]; 
 
   oneof target {
     // The time to seek to.
