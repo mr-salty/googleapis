@@ -26,6 +26,7 @@ option java_package = "com.google.api";
 option objc_class_prefix = "GAPI";
 option cc_enable_arenas = true;
 
+
 // An annotation designating that this field designates a resource.
 //
 // Example:
@@ -69,20 +70,67 @@ message Resource {
   // resource pattern.
   enum History {
     HISTORY_UNSPECIFIED = 0;
-    
+
     // The resource originally had one pattern and launched as such, and
     // additional patterns were added later. This should only be set on
     // the "original" pattern.
     ORIGINALLY_SINGLE_PATTERN = 1;
-    
+
     // The resource has one pattern, but the API owner expects to add more
     // later. (This is the inverse of ORIGINALLY_SINGLE_PATTERN, and prevents
     // that from being necessary once there are multiple patterns.)
     FUTURE_MULTI_PATTERN = 2;
   }
-  
+
   // The historical or future-looking state of the resource pattern.
   History history = 2;
+}
+
+
+// An annotation designating that this field is a reference to a resource
+// defined by another message.
+message ResourceReference {
+  // The fully qualified message name of the type that this field references.
+  // Marks this as a field referring to a resource in another message.
+  //
+  // Example:
+  //
+  //   message Subscription {
+  //     string topic = 2
+  //       [(google.api.resource_reference).message = "google.pubsub.v1.Topic"];
+  //   }
+  //
+  // If the referenced message is in the same proto package, the package
+  // may be omitted:
+  //
+  //   message Subscription {
+  //     string topic = 2
+  //       [(google.api.resource_reference).message = "Topic"];
+  //   }
+  string message = 1;
+
+  // The fully-qualified message name of a child of the type that this field
+  // references.
+  //
+  // This is useful for `parent` fields where a resource has more than one
+  // possible type of parent.
+  //
+  // Example:
+  //
+  //   message ListLogEntriesRequest {
+  //     string parent = 1 [(google.api.resource_reference) = {
+  //       child_message: "google.logging.v2.LogEntry"
+  //     };
+  //   }
+  //
+  // If the referenced message is in the same proto package, the package
+  // may be omitted:
+  //
+  //   message ListLogEntriesRequest {
+  //     string parent = 1
+  //       [(google.api.resource_reference).child_message = "LogEntry"];
+  //   }
+  string child_message = 2;
 }
 
 
@@ -112,54 +160,6 @@ message ResourceDefinition {
 }
 
 
-// An annotation designating that this field is a reference to a resource
-// defined by another message.
-message ResourceReference {
-  // The fully qualified message name of the type that this field references.
-  // Marks this as a field referring to a resource in another message.
-  //
-  // Example:
-  //
-  //   message Subscription {
-  //     string topic = 2 [(google.api.resource_reference) = {
-  //       resource: "google.pubsub.v1.Topic"
-  //     }];
-  //   }
-  //
-  // If the referenced message is in the same proto package, the package
-  // may be omitted:
-  //
-  //   message Subscription {
-  //     string topic = 2
-  //       [(google.api.resource_reference).resource = "Topic"];
-  //   }
-  string resource = 1;
-
-  // The fully-qualified message name of a child of the type that this field
-  // references.
-  //
-  // This is useful for `parent` fields where a resource has more than one
-  // possible type of parent.
-  //
-  // Example:
-  //
-  //   message ListLogEntriesRequest {
-  //     string parent = 1 [(google.api.resource_reference) = {
-  //       child_resource: "google.logging.v2.LogEntry"
-  //     };
-  //   }
-  //
-  // If the referenced message is in the same proto package, the package
-  // may be omitted:
-  //
-  //   message ListLogEntriesRequest {
-  //     string parent = 1
-  //       [(google.api.resource_reference).child_resource = "LogEntry"];
-  //   }
-  string child_resource = 2;
-}
-
-
 extend google.protobuf.FieldOptions {
   // A representation of the resource.
   // This is generally intended to be attached to the "name" field of
@@ -183,7 +183,7 @@ extend google.protobuf.FieldOptions {
   //
   //   message Subscription {
   //     string topic = 2
-  //       [(google.api.resource_reference).resource = "google.pubsub.v1.Topic"];
+  //       [(google.api.resource_reference).message = "google.pubsub.v1.Topic"];
   //   }
   //
   // If the referenced message is in the same proto package, the package
@@ -191,7 +191,7 @@ extend google.protobuf.FieldOptions {
   //
   //   message Subscription {
   //     string topic = 2
-  //       [(google.api.resource_reference).resource = "Topic"];
+  //       [(google.api.resource_reference).message = "Topic"];
   //   }
   //
   // Only one of {`resource`, `resource_reference`} may be set.
@@ -216,7 +216,7 @@ extend google.protobuf.FileOptions {
 //
 //     message ListTopicsRequest {
 //       string parent = 1
-//         [(google.api.resource_reference) = "google.api.Project"];
+//         [(google.api.resource_reference).message = "google.api.Project"];
 //     }
 option (google.api.resource_definition) = {
   symbol: "Project"
