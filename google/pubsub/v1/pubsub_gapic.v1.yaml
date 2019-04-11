@@ -1,0 +1,604 @@
+collection_oneofs:
+- collection_names:
+  - topic
+  - deleted_topic
+  oneof_name: topic_oneof
+collections:
+- entity_name: topic
+  name_pattern: projects/{project}/topics/{topics}
+- entity_name: subscription
+  name_pattern: projects/{project}/subscriptions/{subscription}
+- entity_name: snapshot
+  name_pattern: projects/{project}/snapshots/{snapshot}
+config_schema_version: 2.0.0-reconstructed
+fixed_resource_name_values:
+- entity_name: deleted_topic
+  fixed_value: _deleted-topic_
+interfaces:
+- lang_doc:
+    java: To retrieve messages from a subscription, see the Subscriber class.
+  methods:
+  - flattening:
+      groups:
+      - parameters:
+        - name
+        - topic
+        - push_config
+        - ack_deadline_seconds
+    name: CreateSubscription
+    required_fields:
+    - name
+    - topic
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+    name: GetSubscription
+    required_fields:
+    - subscription
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    name: UpdateSubscription
+    required_fields:
+    - subscription
+    - update_mask
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    sample_code_init_fields:
+    - update_mask.paths[0]="ack_deadline_seconds"
+    - subscription.ack_deadline_seconds=42
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - project
+    name: ListSubscriptions
+    page_streaming:
+      request:
+        page_size_field: page_size
+        token_field: page_token
+      response:
+        resources_field: subscriptions
+        token_field: next_page_token
+    required_fields:
+    - project
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+    name: DeleteSubscription
+    required_fields:
+    - subscription
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      snapshot: snapshot
+    name: GetSnapshot
+    surface_treatments:
+    - include_languages:
+      - go
+      - java
+      - csharp
+      - ruby
+      - nodejs
+      - python
+      - php
+      visibility: DISABLED
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+        - ack_ids
+        - ack_deadline_seconds
+    name: ModifyAckDeadline
+    required_fields:
+    - subscription
+    - ack_ids
+    - ack_deadline_seconds
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - java
+      visibility: PACKAGE
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+        - ack_ids
+    name: Acknowledge
+    required_fields:
+    - subscription
+    - ack_ids
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: messaging
+    surface_treatments:
+    - include_languages:
+      - java
+      visibility: PACKAGE
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+        - return_immediately
+        - max_messages
+    name: Pull
+    required_fields:
+    - subscription
+    - max_messages
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: messaging
+    surface_treatments:
+    - include_languages:
+      - java
+      visibility: PACKAGE
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    grpc_streaming:
+      response:
+        resources_field: received_messages
+    name: StreamingPull
+    required_fields:
+    - subscription
+    - stream_ack_deadline_seconds
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: none
+    retry_params_name: streaming_messaging
+    surface_treatments:
+    - include_languages:
+      - java
+      visibility: PACKAGE
+    timeout_millis: 900000
+  - field_name_patterns:
+      subscription: subscription
+    flattening:
+      groups:
+      - parameters:
+        - subscription
+        - push_config
+    name: ModifyPushConfig
+    required_fields:
+    - subscription
+    - push_config
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - project
+    name: ListSnapshots
+    page_streaming:
+      request:
+        page_size_field: page_size
+        token_field: page_token
+      response:
+        resources_field: snapshots
+        token_field: next_page_token
+    required_fields:
+    - project
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      name: snapshot
+    flattening:
+      groups:
+      - parameters:
+        - name
+        - subscription
+    name: CreateSnapshot
+    required_fields:
+    - name
+    - subscription
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      snapshot: snapshot
+    name: UpdateSnapshot
+    required_fields:
+    - snapshot
+    - update_mask
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    sample_code_init_fields:
+    - update_mask.paths[0]="expire_time"
+    - snapshot.expire_time.seconds=123456
+    timeout_millis: 60000
+  - field_name_patterns:
+      snapshot: snapshot
+    flattening:
+      groups:
+      - parameters:
+        - snapshot
+    name: DeleteSnapshot
+    required_fields:
+    - snapshot
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      subscription: subscription
+    name: Seek
+    required_fields:
+    - subscription
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+        - policy
+    name: SetIamPolicy
+    required_fields:
+    - resource
+    - policy
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+    name: GetIamPolicy
+    required_fields:
+    - resource
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+        - permissions
+    name: TestIamPermissions
+    required_fields:
+    - resource
+    - permissions
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  name: google.pubsub.v1.Subscriber
+  retry_codes_def:
+  - name: idempotent
+    retry_codes:
+    - UNKNOWN
+    - ABORTED
+    - UNAVAILABLE
+  - name: non_idempotent
+    retry_codes:
+    - UNAVAILABLE
+  - name: none
+    retry_codes: []
+  retry_params_def:
+  - initial_retry_delay_millis: 100
+    initial_rpc_timeout_millis: 60000
+    max_retry_delay_millis: 60000
+    max_rpc_timeout_millis: 60000
+    name: default
+    retry_delay_multiplier: 1.3
+    rpc_timeout_multiplier: 1
+    total_timeout_millis: 600000
+  - initial_retry_delay_millis: 100
+    initial_rpc_timeout_millis: 12000
+    max_retry_delay_millis: 60000
+    max_rpc_timeout_millis: 12000
+    name: messaging
+    retry_delay_multiplier: 1.3
+    rpc_timeout_multiplier: 1
+    total_timeout_millis: 600000
+  - initial_retry_delay_millis: 100
+    initial_rpc_timeout_millis: 600000
+    max_retry_delay_millis: 60000
+    max_rpc_timeout_millis: 600000
+    name: streaming_messaging
+    retry_delay_multiplier: 1.3
+    rpc_timeout_multiplier: 1
+    total_timeout_millis: 600000
+- lang_doc:
+    java: To publish messages to a topic, see the Publisher class.
+  methods:
+  - flattening:
+      groups:
+      - parameters:
+        - name
+    name: CreateTopic
+    required_fields:
+    - name
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      topic: topic
+    name: UpdateTopic
+    required_fields:
+    - topic
+    - update_mask
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - batching:
+      batch_descriptor:
+        batched_field: messages
+        discriminator_fields:
+        - topic
+        subresponse_field: message_ids
+      thresholds:
+        delay_threshold_millis: 10
+        element_count_limit: 1000
+        element_count_threshold: 10
+        request_byte_limit: 10485760
+        request_byte_threshold: 1024
+    field_name_patterns:
+      topic: topic
+    flattening:
+      groups:
+      - parameters:
+        - topic
+        - messages
+    name: Publish
+    required_fields:
+    - topic
+    - messages
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: publish
+    retry_params_name: messaging
+    sample_code_init_fields:
+    - messages[0].data
+    surface_treatments:
+    - include_languages:
+      - java
+      visibility: PACKAGE
+    timeout_millis: 60000
+  - field_name_patterns:
+      topic: topic
+    flattening:
+      groups:
+      - parameters:
+        - topic
+    name: GetTopic
+    required_fields:
+    - topic
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - project
+    name: ListTopics
+    page_streaming:
+      request:
+        page_size_field: page_size
+        token_field: page_token
+      response:
+        resources_field: topics
+        token_field: next_page_token
+    required_fields:
+    - project
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      topic: topic
+    flattening:
+      groups:
+      - parameters:
+        - topic
+    name: ListTopicSubscriptions
+    page_streaming:
+      request:
+        page_size_field: page_size
+        token_field: page_token
+      response:
+        resources_field: subscriptions
+        token_field: next_page_token
+    required_fields:
+    - topic
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - field_name_patterns:
+      topic: topic
+    name: ListTopicSnapshots
+    surface_treatments:
+    - include_languages:
+      - go
+      - java
+      - csharp
+      - ruby
+      - nodejs
+      - python
+      - php
+      visibility: DISABLED
+  - field_name_patterns:
+      topic: topic
+    flattening:
+      groups:
+      - parameters:
+        - topic
+    name: DeleteTopic
+    required_fields:
+    - topic
+    resource_name_treatment: STATIC_TYPES
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+        - policy
+    name: SetIamPolicy
+    required_fields:
+    - resource
+    - policy
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+    name: GetIamPolicy
+    required_fields:
+    - resource
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  - flattening:
+      groups:
+      - parameters:
+        - resource
+        - permissions
+    name: TestIamPermissions
+    required_fields:
+    - resource
+    - permissions
+    reroute_to_grpc_interface: google.iam.v1.IAMPolicy
+    retry_codes_name: non_idempotent
+    retry_params_name: default
+    surface_treatments:
+    - include_languages:
+      - go
+      visibility: DISABLED
+    timeout_millis: 60000
+  name: google.pubsub.v1.Publisher
+  retry_codes_def:
+  - name: idempotent
+    retry_codes:
+    - UNKNOWN
+    - ABORTED
+    - UNAVAILABLE
+  - name: non_idempotent
+    retry_codes:
+    - UNAVAILABLE
+  - name: none
+    retry_codes: []
+  - name: publish
+    retry_codes:
+    - ABORTED
+    - CANCELLED
+    - INTERNAL
+    - RESOURCE_EXHAUSTED
+    - UNKNOWN
+    - UNAVAILABLE
+    - DEADLINE_EXCEEDED
+  retry_params_def:
+  - initial_retry_delay_millis: 100
+    initial_rpc_timeout_millis: 60000
+    max_retry_delay_millis: 60000
+    max_rpc_timeout_millis: 60000
+    name: default
+    retry_delay_multiplier: 1.3
+    rpc_timeout_multiplier: 1
+    total_timeout_millis: 600000
+  - initial_retry_delay_millis: 100
+    initial_rpc_timeout_millis: 12000
+    max_retry_delay_millis: 60000
+    max_rpc_timeout_millis: 30000
+    name: messaging
+    retry_delay_multiplier: 1.3
+    rpc_timeout_multiplier: 1
+    total_timeout_millis: 600000
+  smoke_test:
+    init_fields:
+    - project%project=$PROJECT_ID
+    method: ListTopics
+language_settings:
+  csharp:
+    interface_names:
+      google.pubsub.v1.Publisher: PublisherServiceApi
+      google.pubsub.v1.Subscriber: SubscriberServiceApi
+    package_name: Google.Cloud.PubSub.V1
+    release_level: GA
+  go:
+    domain_layer_location: cloud.google.com/go/pubsub
+    package_name: cloud.google.com/go/pubsub/apiv1
+    release_level: GA
+  java:
+    interface_names:
+      google.pubsub.v1.Publisher: TopicAdmin
+      google.pubsub.v1.Subscriber: SubscriptionAdmin
+    package_name: com.google.cloud.pubsub.v1
+    release_level: GA
+  nodejs:
+    domain_layer_location: google-cloud
+    package_name: pubsub.v1
+    release_level: GA
+  php:
+    package_name: Google\Cloud\PubSub\V1
+    release_level: GA
+  python:
+    package_name: google.cloud.pubsub_v1.gapic
+    release_level: GA
+  ruby:
+    package_name: Google::Cloud::PubSub::V1
+    release_level: BETA
+type: com.google.api.codegen.ConfigProto
