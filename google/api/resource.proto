@@ -65,10 +65,24 @@ message Resource {
   //   - "projects/{project}/knowledgeBases/{knowledge_base}"
   string pattern = 1;
 
-  // Set this to true if the resource originally had one pattern and launched
-  // as such, and multiple patterns were added later. This should only be set
-  // on the original pattern.
-  bool historical_single_pattern = 2;
+  // A description of the historical or future-looking state of the
+  // resource pattern.
+  enum History {
+    HISTORY_UNSPECIFIED = 0;
+    
+    // The resource originally had one pattern and launched as such, and
+    // additional patterns were added later. This should only be set on
+    // the "original" pattern.
+    ORIGINALLY_SINGLE_PATTERN = 1;
+    
+    // The resource has one pattern, but the API owner expects to add more
+    // later. (This is the inverse of ORIGINALLY_SINGLE_PATTERN, and prevents
+    // that from being necessary once there are multiple patterns.)
+    FUTURE_MULTI_PATTERN = 2;
+  }
+  
+  // The historical or future-looking state of the resource pattern.
+  History history = 2;
 }
 
 
